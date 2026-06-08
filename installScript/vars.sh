@@ -19,9 +19,9 @@ ZMBKP_SHARE="/usr/local/share/zmbackup"  # Keep for upgrade routine
 ZMBKP_LIB="/usr/local/lib/zmbackup"      # The new path for the libs
 
 # ZIMBRA DEFAULT INSTALLATION PATH AND INTERNAL CONFIGURATION
-OSE_USER="zimbra"                                                                                                                              # Zimbra's unix user
-OSE_INSTALL_DIR="/opt/zimbra"                                                                                                                  # The Zimbra's installation path
-OSE_DEFAULT_BKP_DIR="/opt/zimbra/backup"                                                                                                       # Where you will store your backup
+OSE_USER="zextras"                                                                                                                              # Zimbra's unix user
+OSE_INSTALL_DIR="/opt/zextras"                                                                                                                  # The Zimbra's installation path
+OSE_DEFAULT_BKP_DIR="/opt/zextras/backup"                                                                                                       # Where you will store your backup
 OSE_INSTALL_DOMAIN=`su -s /bin/bash -c "$OSE_INSTALL_DIR/bin/zmprov gad | head -1" $OSE_USER`                                                  # Zimbra's Domain
 OSE_INSTALL_HOSTNAME=`hostname --fqdn`
 OSE_INSTALL_PORT=`cat /opt/zimbra/conf/zmztozmig.conf | grep SourceAdminPort | cut -d"=" -f2`

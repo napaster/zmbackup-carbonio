@@ -7,7 +7,7 @@
 function install_ubuntu() {
   echo "Installing dependencies. Please wait..."
   apt update > /dev/null 2>&1
-  apt install -y parallel > /dev/null 2>&1
+  apt install -y parallel zstd > /dev/null 2>&1
   BASHERRCODE=$?
   if [[ $BASHERRCODE -eq 0 ]]; then
     echo "Dependencies installed with success!"
@@ -16,7 +16,7 @@ function install_ubuntu() {
     echo "Please check if you have connection with the internet and apt is"
     echo "working and try again."
     echo "Or you can try manual execute the command:"
-    echo "apt update && apt install -y parallel"
+    echo "apt update && apt install -y parallel zstd"
     exit "$ERR_DEPNOTFOUND"
   fi
 }
