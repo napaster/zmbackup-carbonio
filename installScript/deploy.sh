@@ -5,7 +5,7 @@
 # blocklist_gen: Generate a blocked list of all accounts Zmbackup should ignore
 ################################################################################
 function blocklist_gen(){
-  for ACCOUNT in $(sudo -H -u "$OSE_USER" bash -c "/opt/zimbra/bin/zmprov -l gaa"); do
+  for ACCOUNT in $(sudo -H -u "$OSE_USER" bash -c "/opt/zextras/bin/zmprov -l gaa"); do
     if  [[ "$ACCOUNT" = "galsync"* ]] || \
     [[ "$ACCOUNT" = "virus"* ]] || \
     [[ "$ACCOUNT" = "ham"* ]] || \
@@ -53,7 +53,7 @@ function deploy_new() {
 
   # Disable Parallel's message - Zmbackup remind the user about GNU Parallel
   mkdir "$OSE_INSTALL_DIR"/.parallel > /dev/null 2>&1 && touch "$OSE_INSTALL_DIR"/.parallel/will-cite
-  chown -R zimbra. "$OSE_INSTALL_DIR"/.parallel
+  chown -R zextras. "$OSE_INSTALL_DIR"/.parallel
 
   # Copy file
   install -o "$OSE_USER" -m 700 "$MYDIR"/project/zmbackup "$ZMBKP_SRC"
@@ -117,7 +117,7 @@ function deploy_upgrade(){
 
   # Disable Parallel's message - Zmbackup remind the user about GNU Parallel
   mkdir "$OSE_INSTALL_DIR"/.parallel > /dev/null 2>&1 && touch "$OSE_INSTALL_DIR"/.parallel/will-cite
-  chown -R zimbra. "$OSE_INSTALL_DIR"/.parallel
+  chown -R zextras. "$OSE_INSTALL_DIR"/.parallel
 
   # Copy files
   install -o "$OSE_USER" -m 700 "$MYDIR"/project/zmbackup "$ZMBKP_SRC"

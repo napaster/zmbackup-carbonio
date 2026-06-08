@@ -60,8 +60,8 @@ function create_temp(){
 ################################################################################
 function load_config(){
   local conf="${ZMBACKUP_CONF:-/etc/zmbackup/zmbackup.conf}"
-  local bashrc="${ZIMBRA_BASHRC:-/opt/zimbra/.bashrc}"
-  local ldaprc="${ZIMBRA_LDAPRC:-/opt/zimbra/.ldaprc}"
+  local bashrc="${ZIMBRA_BASHRC:-/opt/zextras/.bashrc}"
+  local ldaprc="${ZIMBRA_LDAPRC:-/opt/zextras/.ldaprc}"
   if [ -f "$conf" ]; then
     source "$conf" 2> /dev/null
   else
@@ -72,8 +72,8 @@ function load_config(){
   if [ -f "$bashrc" ]; then
     source "$bashrc" 2> /dev/null
   else
-    zmlog local7.err "Zmbackup: zimbra user's .bashrc not found."
-    echo "ERROR - zimbra user's .bashrc not found. Can't proceed whitout the file."
+    zmlog local7.err "Zmbackup: zextras user's .bashrc not found."
+    echo "ERROR - zextras user's .bashrc not found. Can't proceed whitout the file."
     exit 1
   fi
   if [ -f "$ldaprc" ]; then
@@ -110,7 +110,7 @@ function constant(){
   declare -gxr SIFILTER="zimbraSignatureName"
 
   # PID FILE
-  declare -gxr PID='/opt/zimbra/log/zmbackup.pid'
+  declare -gxr PID='/opt/zextras/log/zmbackup.pid'
 }
 
 ################################################################################
@@ -157,7 +157,7 @@ function validate_config(){
   ERR="false"
 
   if [ -z "$BACKUPUSER" ]; then
-  	BACKUPUSER="zimbra"
+  	BACKUPUSER="zextras"
     zmlog local7.warn "Zmbackup: BACKUPUSER not informed - setting as user zimbra instead."
   fi
 
@@ -168,8 +168,8 @@ function validate_config(){
   fi
 
   if [ -z "$WORKDIR" ]; then
-    WORKDIR="/opt/zimbra/backup"
-    zmlog local7.warn "Zmbackup: WORKDIR not informed - setting as /opt/zimbra/backup/ instead."
+    WORKDIR="/opt/zextras/backup"
+    zmlog local7.warn "Zmbackup: WORKDIR not informed - setting as /opt/zextras/backup/ instead."
   fi
 
   if [ -z "$ENABLE_EMAIL_NOTIFY" ]; then
@@ -259,7 +259,7 @@ function checkpid(){
     PIDP=$(cat "$PID")
     PIDR=$(ps -efa | awk '{print $2}' | grep -c "^$PIDP$")
     if [ "$PIDR" -gt 0 ]; then
-      echo "FATAL: could not write lock file '/opt/zimbra/log/zmbackup.pid': File already exist"
+      echo "FATAL: could not write lock file '/opt/zextras/log/zmbackup.pid': File already exist"
       echo "This file exist as a secure measurement to protect your system to run two zmbackup"
       echo "instances at the same time."
       exit 4

@@ -49,15 +49,15 @@ function mailbox_backup()
     YESTERDAY=$(date -d "$DATE" --date='-48 hours' +%m/%d/%Y)
     AFTER='&'"query=after:\"$YESTERDAY\""
   fi
-  if $ZMMAILBOX -t0 -z -m "$1" getRestURL --output "$TEMPDIR"/"$1".tgz "/?fmt=tgz&resolve=skip$AFTER" > "$TEMP_CLI_OUTPUT" 2>&1; then
-    if [[ -s $TEMPDIR/$1.tgz ]]; then
+  if $ZMMAILBOX -t0 -z -m "$1" getRestURL "/?fmt=tgz&resolve=skip$AFTER" | zstd -o "$TEMPDIR"/"$1".tar.zst > "$TEMP_CLI_OUTPUT" 2>&1; then
+    if [[ -s $TEMPDIR/$1.tar.zst ]]; then
       zmlog local7.info "Zmbackup: Mailbox - Backup for account $1 finished."
       export ERRCODE=0
     else
       zmlog local7.err "Zmbackup: Mailbox - Backup for account $1 finished, but the file is empty. Removing..."
       echo "Zmbackup: $1 " | zmlog local7.err
       zmlog local7.err < "$TEMP_CLI_OUTPUT"
-      rm -rf "$TEMPDIR"/"$1".tgz
+      rm -rf "$TEMPDIR"/"$1".tar.zst
       export ERRCODE=1
     fi
   else
@@ -106,7 +106,7 @@ function ldap_restore()
 function mailbox_restore()
 {
   TEMP_CLI_OUTPUT=$(mktemp)
-  if $ZMMAILBOX -t0 -z -m "$2" postRestURL '//?fmt=tgz&resolve=skip' "$WORKDIR"/"$1"/"$2".tgz > "$TEMP_CLI_OUTPUT" 2>&1; then
+  if zstd -d -c "$WORKDIR"/"$1"/"$2".tar.zst | $ZMMAILBOX -t0 -z -m "$2" postRestURL "//?fmt=tgz&resolve=skip" > "$TEMP_CLI_OUTPUT" 2>&1; then
     BASHERRCODE=0
     if grep -q "No such file or directory" "$TEMP_CLI_OUTPUT"; then
       printf "Account %s has nothing to restore - skipping..." "$2"
